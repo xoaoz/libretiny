@@ -1,0 +1,1 @@
+RTL8710AF firmware is produced by GitHub Actions after a successful build.
