@@ -5,9 +5,6 @@
 		"f_cpu": "83333333L",
 		"prefix": "arm-none-eabi-"
 	},
-	"flash": {
-		"size": "1M"
-	},
 	"connectivity": [
 		"wifi"
 	],
