@@ -1,0 +1,24 @@
+{
+	"_base": [
+		"generic",
+		"realtek-amb1",
+		"ic/rtl8710af"
+	],
+	"build": {
+		"mcu": "cortex-m3",
+		"variant": "rtl8710"
+	},
+	"name": "Generic - RTL8710AF (1MB)",
+	"symbol": "RTL8710AF (1MB)",
+	"vendor": "Generic",
+	"url": "https://github.com/xoaoz/ameba-arduino-1",
+	"doc": {
+		"params": {
+			"manufacturer": "Realtek",
+			"series": "Ameba1",
+			"chip": "RTL8710AF",
+			"flash": "1MB",
+			"cpu": "ARM Cortex-M3 @ 83.333333MHz"
+		}
+	}
+}
