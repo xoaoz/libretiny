@@ -1,0 +1,98 @@
+name: Build RTL8710AF
+
+on:
+  push:
+    branches:
+      - feature/rtl8710af-ameba1
+  pull_request:
+    branches:
+      - feature/rtl8710af-ameba1
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout LibreTiny
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install PlatformIO
+        run: python -m pip install --upgrade pip platformio
+
+      - name: Fetch Ameba Arduino 1 SDK
+        run: |
+          git clone --depth 1 https://github.com/xoaoz/ameba-arduino-1.git "$HOME/.platformio/packages/framework-arduino-ameba1"
+          test -f "$HOME/.platformio/packages/framework-arduino-ameba1/platform.txt"
+          test -d "$HOME/.platformio/packages/framework-arduino-ameba1/tools"
+
+      - name: Show PlatformIO configuration
+        run: |
+          pio --version
+          pio boards generic-rtl8710af-1mb || true
+          grep -R "generic-rtl8710af-1mb\|rtl8710" -n boards platform.json builder | head -100 || true
+
+      - name: Build RTL8710AF
+        id: build
+        run: |
+          set -o pipefail
+          pio run -e generic-rtl8710af-1mb 2>&1 | tee rtl8710af-build.log
+
+      - name: Inspect build output
+        run: |
+          set -eux
+          find .pio/build/generic-rtl8710af-1mb -type f -printf '%p %s bytes\n' | sort
+          echo '--- firmware candidates ---'
+          find .pio/build/generic-rtl8710af-1mb -type f \( -name '*.elf' -o -name '*.bin' -o -name '*.map' \) -print
+          echo '--- ram_all.bin candidates ---'
+          find .pio/build/generic-rtl8710af-1mb . -type f -name 'ram_all.bin' -print
+          echo '--- memory report ---'
+          if [ -f .pio/build/generic-rtl8710af-1mb/firmware.elf ]; then
+            arm-none-eabi-size .pio/build/generic-rtl8710af-1mb/firmware.elf || true
+          fi
+
+      - name: Collect firmware
+        run: |
+          set -eux
+          mkdir -p artifacts
+          cp rtl8710af-build.log artifacts/
+          find .pio/build/generic-rtl8710af-1mb -type f \( -name '*.elf' -o -name '*.bin' -o -name '*.map' \) -exec cp --parents {} artifacts/ \;
+          find .pio/build/generic-rtl8710af-1mb -type f -name 'ram_all.bin' -exec cp --parents {} artifacts/ \;
+          printf 'RTL8710AF build artifacts\n\n' > artifacts/build-summary.txt
+          find .pio/build/generic-rtl8710af-1mb -type f -printf '%p %s bytes\n' | sort >> artifacts/build-summary.txt
+
+      - name: Upload firmware artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtl8710af-firmware-${{ github.sha }}
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Commit generated firmware to branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/feature/rtl8710af-ameba1'
+        run: |
+          set -eux
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          mkdir -p firmware/rtl8710af
+          find .pio/build/generic-rtl8710af-1mb -type f \( -name '*.bin' -o -name '*.elf' -o -name '*.map' \) -exec cp {} firmware/rtl8710af/ \;
+          find .pio/build/generic-rtl8710af-1mb -type f -name 'ram_all.bin' -exec cp {} firmware/rtl8710af/ \;
+          cp rtl8710af-build.log firmware/rtl8710af/build.log
+          git add firmware/rtl8710af
+          if git diff --cached --quiet; then
+            echo 'No generated firmware changes to commit.'
+          else
+            git commit -m 'build: add RTL8710AF firmware artifact'
+            git push origin HEAD:feature/rtl8710af-ameba1
+          fi
