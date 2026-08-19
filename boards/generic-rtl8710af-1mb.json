@@ -1,8 +1,7 @@
 {
 	"_base": [
 		"generic",
-		"realtek-amb1",
-		"ic/rtl8710af"
+		"realtek-amb1"
 	],
 	"build": {
 		"mcu": "cortex-m3",
