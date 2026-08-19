@@ -21,7 +21,7 @@
     "framework-realtek-amb1": {
       "type": "framework",
       "optional": true,
-      "version": "https://github.com/libretiny-eu/framework-realtek-amb1#v2022.06.21",
+      "version": "https://github.com/xoaoz/ameba-arduino-1#dev",
       "version_prefix": true,
       "toolchains": {
         "any": "gccarmnoneeabi@~1.100301.0"
