@@ -20,6 +20,10 @@ extern "C" {
 #include <rand.h>
 #include <rtl8710b.h>
 #endif
+#if LT_RTL8710A
+#include <rtl8195a.h>
+#include <wifi_conf.h>
+#endif
 #if LT_RTL8720C
 #include <hal.h>
 #include <hal_sys_ctrl.h>

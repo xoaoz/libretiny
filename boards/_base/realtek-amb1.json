@@ -1,0 +1,20 @@
+{
+	"build": {
+		"family": "RTL8710A",
+				"ldscript": "rtl8710-symbol-v03-img2_arduino_arduino.ld",
+		"f_cpu": "83333333L",
+		"prefix": "arm-none-eabi-"
+	},
+	"flash": {
+		"app": "0x000000+0x100000"
+	},
+	"connectivity": [
+		"wifi"
+	],
+	"upload": {
+		"maximum_ram_size": 434176,
+		"flash_size": 1048576,
+		"maximum_size": 434176,
+		"speed": 1500000
+	}
+}

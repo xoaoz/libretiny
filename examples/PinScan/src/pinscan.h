@@ -5,8 +5,8 @@
 #define USE_WIFI   0   // set up a WiFi telnet server
 #define DELAY_READ 100 // interval for realtime readouts
 
-#define WIFI_SSID "MySSID"
-#define WIFI_PASS "Secr3tPa$$w0rd"
+#define WIFI_SSID "101"
+#define WIFI_PASS "ZQM888888"
 
 #define EXAMPLE_VER "1.0"
 

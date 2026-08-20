@@ -54,7 +54,7 @@ unsigned long micros(void) {
 void pinRemoveMode(PinInfo *pin, uint32_t mask) {
 	PinData *data = pinData(pin);
 	if ((mask & PIN_GPIO) && (pin->enabled & PIN_GPIO)) {
-		gpio_deinit(data->gpio);
+				gpio_deinit(data->gpio, pin->gpio);
 		free(data->gpio);
 		pinDisable(pin, PIN_GPIO);
 	}

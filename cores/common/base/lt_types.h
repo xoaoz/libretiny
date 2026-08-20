@@ -22,6 +22,8 @@ typedef enum {
 } lt_cpu_family_t;
 
 typedef enum {
+	// Realtek Ameba1
+	RTL8710AF = CPU_MODEL(F_RTL8710A, 0x00),
 	// Realtek AmebaZ
 	// IDs copied from rtl8710b_efuse.h
 	RTL8710BL = CPU_MODEL(F_RTL8710B, 0xE0), // ???

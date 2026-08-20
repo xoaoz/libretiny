@@ -76,7 +76,7 @@ env.ConfigureEnvironment(platform, board)
 # Framework builder (base.py/arduino.py) is executed in BuildProgram()
 # Force including the base framework in case no other is specified
 if "nobuild" not in COMMAND_LINE_TARGETS and not env.get("PIOFRAMEWORK"):
-    env.SConscript("frameworks/base.py")
+    env.SConscript("base.py", chdir=True)
 
 #
 # Target: Build executable and linkable firmware
