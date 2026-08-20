@@ -56,6 +56,13 @@ extern void handleRtwEvent(uint16_t event, char *data, int len, int flags);
 #define NETNAME_STA WLAN0_NAME
 #define NETNAME_AP	(wifi_mode & WIFI_MODE_STA ? WLAN1_NAME : WLAN0_NAME)
 
+#if LT_RTL8710A
+#define NETIF_IP_ADDR4(netif) ((netif)->ip_addr)
+#define NETIF_IP_NETMASK4(netif) ((netif)->netmask)
+#else
+#define NETIF_IP_ADDR4(netif) (*netif_ip_addr4(netif))
+#define NETIF_IP_NETMASK4(netif) (*netif_ip_netmask4(netif))
+#endif
 typedef struct {
 	bool initialized;
 	bool sleep;

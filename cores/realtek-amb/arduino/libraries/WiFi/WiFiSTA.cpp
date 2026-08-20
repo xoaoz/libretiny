@@ -187,7 +187,7 @@ bool WiFiClass::getAutoReconnect() {
 IPAddress WiFiClass::localIP() {
 	if (!wifi_mode)
 		return IPAddress();
-	return netif_ip_addr4(NETIF_RTW_STA)->addr;
+	return NETIF_IP_ADDR4(NETIF_RTW_STA).addr;
 }
 
 uint8_t *WiFiClass::macAddress(uint8_t *mac) {
@@ -200,15 +200,23 @@ uint8_t *WiFiClass::macAddress(uint8_t *mac) {
 }
 
 IPAddress WiFiClass::subnetMask() {
-	return netif_ip_netmask4(NETIF_RTW_STA)->addr;
+	return NETIF_IP_NETMASK4(NETIF_RTW_STA).addr;
 }
 
 IPAddress WiFiClass::gatewayIP() {
+	#if LT_RTL8710A
+	return (&xnetif[RTW_STA_INTERFACE])->gw.addr;
+	#else
 	return netif_ip_gw4(NETIF_RTW_STA)->addr;
+	#endif
 }
 
 IPAddress WiFiClass::dnsIP(uint8_t dns_no) {
+	#if LT_RTL8710A
+	return dns_getserver(dns_no).addr;
+	#else
 	return dns_getserver(0)->addr;
+	#endif
 }
 
 IPAddress WiFiClass::broadcastIP() {

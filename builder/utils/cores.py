@@ -79,16 +79,15 @@ def env_add_core_sources(env: Environment, queue, name: str, path: str) -> bool:
     )
     return True
 
-
-def env_add_arduino_libraries(env: Environment, queue, name: str, path: str) -> bool:
+def env_add_arduino_libraries(
+    env: Environment, queue, name: str, path: str, excludes: list[str] | None = None
+) -> bool:
     if not isdir(env.subst(path)):
         return False
     queue.AddLibrary(
         name=f"core_{name}_libraries",
         base_dir=path,
-        srcs=[
-            "+<**/*.c*>",
-        ],
+        srcs=["+<**/*.c*>"] + [f"-<{item}/**>" for item in (excludes or [])],
         includes=(
             [
                 "!<*/.>",

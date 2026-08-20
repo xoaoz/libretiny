@@ -56,7 +56,7 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 			LT_EM(WIFI, "Error while changing mode(%u)", mode);
 			goto error;
 		}
-		rltk_wlan_deinit_fastly();
+		rltk_wlan_deinit();
 		rltk_wlan_rf_off();
 		init_event_callback_list();
 		vTaskDelay(20);

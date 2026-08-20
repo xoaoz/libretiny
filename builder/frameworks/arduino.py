@@ -12,7 +12,7 @@ env["ARDUINO"] = True
 family: Family = env["FAMILY_OBJ"]
 
 # Add base cores' sources first
-env.SConscript("base.py")
+env.SConscript("base.py", chdir=True)
 
 # Build a safe environment for this script
 queue = env.AddLibraryQueue("arduino", prepend_includes=True)
@@ -27,6 +27,7 @@ env.AddArduinoLibraries(
     queue=queue,
     name="common_arduino",
     path=join("$COMMON_DIR", "arduino", "libraries"),
+    excludes=["common/mDNS"] if family.name == "realtek-amb1" else None,
 )
 # Add sources for this family and each parent
 found = False
@@ -36,7 +37,6 @@ for f in family.inheritance:
 
     found = env.AddCoreSources(queue, name=code, path=join(path, "src")) or found
     env.AddArduinoLibraries(queue, name=code, path=join(path, "libraries"))
-
     if f.short_name:
         env.Prepend(CPPDEFINES=[(f"ARDUINO_ARCH_{f.short_name}", "1")])
     if f.code:

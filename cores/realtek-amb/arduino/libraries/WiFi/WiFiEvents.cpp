@@ -15,7 +15,7 @@ extern "C" {
 static event_list_elem_t event_callback_list[WIFI_EVENT_MAX][WIFI_EVENT_MAX_ROW];
 
 typedef struct {
-	rtw_event_indicate_t event;
+	WIFI_EVENT_INDICATE event;
 	char *buf;
 	int buf_len;
 	int flags;
@@ -67,7 +67,7 @@ void wifi_unreg_event_handler(unsigned int event_cmds, rtw_event_handler_t handl
 // (passing pointers to pointers in xQueueSend/xQueueReceive)
 
 // function called by wext_wlan_indicate
-void wifi_indication(rtw_event_indicate_t event, char *buf, int buf_len, int flags) {
+void wifi_indication(WIFI_EVENT_INDICATE event, char *buf, int buf_len, int flags) {
 	if (event >= WIFI_EVENT_MAX)
 		return;
 	if (wifiEventQueueHandle && wifiEventTaskHandle) {

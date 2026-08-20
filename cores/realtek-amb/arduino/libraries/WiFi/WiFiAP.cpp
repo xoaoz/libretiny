@@ -115,11 +115,11 @@ uint8_t WiFiClass::softAPgetStationNum() {
 }
 
 IPAddress WiFiClass::softAPIP() {
-	return netif_ip_addr4(NETIF_RTW_AP)->addr;
+	return NETIF_IP_ADDR4(NETIF_RTW_AP).addr;
 }
 
 IPAddress WiFiClass::softAPSubnetMask() {
-	return netif_ip_netmask4(NETIF_RTW_AP)->addr;
+	return NETIF_IP_NETMASK4(NETIF_RTW_AP).addr;
 }
 
 const char *WiFiClass::softAPgetHostname() {
